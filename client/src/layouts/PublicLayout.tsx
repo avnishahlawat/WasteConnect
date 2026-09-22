@@ -1,5 +1,5 @@
-import { Link } from 'react-router-dom';
-import { ReactNode } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { ReactNode, useEffect } from 'react';
 import { Leaf } from 'lucide-react';
 
 interface PublicLayoutProps {
@@ -7,6 +7,32 @@ interface PublicLayoutProps {
 }
 
 export function PublicLayout({ children }: PublicLayoutProps) {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (location.hash) {
+      const target = document.querySelector(location.hash);
+      if (target) {
+        setTimeout(() => {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+      }
+    }
+  }, [location]);
+
+  const handleNavClick = (hash: string) => {
+    if (location.pathname === '/') {
+      const target = document.querySelector(hash);
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        window.history.replaceState(null, '', hash);
+      }
+    } else {
+      navigate(`/${hash}`);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <header className="bg-surface border-b border-border sticky top-0 z-50">
@@ -16,9 +42,27 @@ export function PublicLayout({ children }: PublicLayoutProps) {
             <span className="text-xl font-bold tracking-tight">WasteConnect</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-text-muted">
-            <Link to="/#how-it-works" className="hover:text-primary transition-colors">How It Works</Link>
-            <Link to="/#citizens" className="hover:text-primary transition-colors">For Citizens</Link>
-            <Link to="/#authorities" className="hover:text-primary transition-colors">For Authorities</Link>
+            <button 
+              type="button" 
+              onClick={() => handleNavClick('#how-it-works')} 
+              className="hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0 font-medium text-sm text-text-muted hover:text-primary"
+            >
+              How It Works
+            </button>
+            <button 
+              type="button" 
+              onClick={() => handleNavClick('#citizens')} 
+              className="hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0 font-medium text-sm text-text-muted hover:text-primary"
+            >
+              For Citizens
+            </button>
+            <button 
+              type="button" 
+              onClick={() => handleNavClick('#authorities')} 
+              className="hover:text-primary transition-colors cursor-pointer bg-transparent border-0 p-0 font-medium text-sm text-text-muted hover:text-primary"
+            >
+              For Authorities
+            </button>
           </nav>
           <div className="flex items-center gap-3 text-sm font-medium">
             <Link to="/login" className="text-text hover:text-primary transition-colors">Sign In</Link>

@@ -22,7 +22,15 @@ export function LandingPage() {
               <Link to="/register" className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-md font-medium hover:bg-primary-dark transition-colors">
                 Get Started <ArrowRight className="w-4 h-4" />
               </Link>
-              <a href="#how-it-works" className="flex items-center gap-2 bg-background border border-border text-charcoal px-6 py-3 rounded-md font-medium hover:bg-gray-50 transition-colors">
+              <a 
+                href="#how-it-works" 
+                onClick={(e) => {
+                  e.preventDefault();
+                  document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' });
+                  window.history.replaceState(null, '', '#how-it-works');
+                }}
+                className="flex items-center gap-2 bg-background border border-border text-charcoal px-6 py-3 rounded-md font-medium hover:bg-gray-50 transition-colors cursor-pointer"
+              >
                 Learn How It Works
               </a>
             </div>
