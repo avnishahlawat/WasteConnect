@@ -1,0 +1,18 @@
+import { Router } from 'express';
+import { authorityController } from '../controllers/authorityController';
+
+const router = Router();
+
+router.get('/dashboard', authorityController.getDashboard);
+router.get('/issues', authorityController.getIssues);
+router.get('/issues/:id', authorityController.getIssueById);
+router.put('/issues/:id/triage', authorityController.triageIssue);
+router.put('/issues/:id/assign', authorityController.assignIssue);
+router.put('/issues/:id/resolve', authorityController.resolveIssue);
+router.get('/hotspots', authorityController.getHotspots);
+router.post('/hotspots/recalculate', authorityController.recalculateHotspots);
+router.get('/analytics', authorityController.getAnalytics);
+router.post('/announcements', authorityController.createAnnouncement);
+router.get('/announcements', authorityController.getAnnouncements);
+
+export default router;

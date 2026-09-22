@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # MongoDB
+  mongo:
+    image: mongo:7
+    container_name: wasteconnect_mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: wasteconnect
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - wasteconnect_net
+
+  # Backend API
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: wasteconnect_server
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      NODE_ENV: production
+      PORT: 5000
+      MONGODB_URI: mongodb://mongo:27017/wasteconnect
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      CLIENT_URL: http://localhost:3000
+      AI_PROVIDER: mock
+    depends_on:
+      - mongo
+    networks:
+      - wasteconnect_net
+    volumes:
+      - ./server/uploads:/app/uploads
+
+  # Frontend
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: wasteconnect_client
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - server
+    networks:
+      - wasteconnect_net
+
+volumes:
+  mongo_data:
+
+networks:
+  wasteconnect_net:
+    driver: bridge
