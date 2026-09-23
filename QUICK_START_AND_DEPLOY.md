@@ -1,34 +1,44 @@
 # WasteConnect - Quick Start, Architecture & Deployment Cheat Sheet
 
-This document contains everything you need to know to run, demonstrate, and deploy this project.
+This document contains everything you need to know to run, demonstrate, and deploy this project as a complete **MERN Stack** platform in **pure JavaScript and React JSX**.
 
 ---
 
-## 1. Project Directory Structure
+## 1. Project Directory Structure (Pure MERN Stack)
 
 ```text
-wc-02/
-├── client/                     # Frontend (React 18 + Vite + Tailwind + TypeScript)
+wasteconnect/
+├── client/                     # Frontend (React 18 JSX + Vite + Tailwind CSS)
 │   ├── src/
-│   │   ├── api/                # API client functions (TanStack Query / Axios / Fetch)
+│   │   ├── api/                # API client functions (Axios)
 │   │   ├── components/         # Reusable UI widgets & map pickers
-│   │   ├── contexts/           # AuthContext & State management
-│   │   ├── pages/              # Pages for Citizen, Collector, Authority, Admin
-│   │   └── types/              # TypeScript definitions
-│   ├── .env                    # Frontend environment (VITE_API_URL)
+│   │   ├── contexts/           # AuthContext & state management
+│   │   ├── pages/              # Citizen, Collector, Authority, Admin Pages
+│   │   │   ├── admin/          # UsersPage (+ Add User), Dashboard, Pickups
+│   │   │   ├── auth/           # LoginPage (1-Click Demo & Google Sign-In)
+│   │   │   └── citizen/        # MyPickups (Clean decimal weights)
+│   │   ├── App.jsx             # React Router v6 setup
+│   │   └── main.jsx            # Entry point
+│   ├── vercel.json             # Vercel SPA rewrite configuration (fixes 404s)
+│   ├── vite.config.js          # Vite config
+│   ├── tailwind.config.js      # Tailwind CSS config
 │   └── package.json
 │
-├── server/                     # Backend (Node.js + Express + TypeScript)
+├── server/                     # Backend (Node.js + Express.js in pure JavaScript)
 │   ├── src/
-│   │   ├── controllers/        # Request handlers
+│   │   ├── controllers/        # Request handlers (authController, adminController, etc.)
 │   │   ├── middleware/         # Auth (JWT), RBAC, error handling
 │   │   ├── models/             # Mongoose schemas (User, Issue, Pickup, Area, etc.)
-│   │   ├── routes/             # Express route declarations
-│   │   ├── seed/               # Mock data seed script
-│   │   └── services/           # AI provider and business logic
+│   │   ├── routes/             # Express routes (/auth, /citizen, /admin, etc.)
+│   │   ├── seed/               # Database seed script with Indian personas & clean weights
+│   │   ├── services/           # Business logic & hotspot scoring
+│   │   ├── app.js              # Express application setup
+│   │   └── server.js           # Server entrypoint with auto-initialized default Admin
 │   ├── .env                    # Backend secrets (MONGODB_URI, JWT_SECRET)
-│   └── package.json
+│   └── package.json            # Node.js ES Modules ("type": "module")
 │
+├── vercel.json                 # Root Vercel SPA rewrite rules
+├── MERN_ARCHITECTURE.md        # Comprehensive MERN Architecture Guide & Viva Defense Manual
 └── QUICK_START_AND_DEPLOY.md   # This cheat sheet
 ```
 
@@ -50,22 +60,24 @@ wc-02/
 ## 3. How to Run Locally
 
 ### Start Backend
-Open a terminal in `wc-02/server`:
+Open a terminal in `server`:
 ```powershell
 npm run dev
+# Or with standard Node:
+node src/server.js
 ```
-- API URL: `http://localhost:5000`
+- API Base URL: `http://localhost:5000/api`
 - Health check: `http://localhost:5000/api/health`
 
 ### Start Frontend
-Open a terminal in `wc-02/client`:
+Open a terminal in `client`:
 ```powershell
 npm run dev
 ```
 - Web app: `http://localhost:5173`
 
 ### (Optional) Re-seed the Database
-If you ever want to reset test data back to clean state:
+To reset the test data with authentic Indian personas and clean weights:
 ```powershell
 cd server
 npm run seed
@@ -75,36 +87,36 @@ npm run seed
 
 ## 4. Demo Accounts for Presentations
 
-Use these pre-configured accounts to showcase every user role:
+The login page supports **"Continue with Google"** with a modern account chooser, native browser email selection, and standard email/password authentication:
 
-| Persona | Email | Password | What to Demo |
-|---|---|---|---|
-| **Citizen** | `maya.chen@example.com` | `Password123!` | Request household pickup; report street litter with map pin and photo. |
-| **Collector** | `alex.martinez@wasteconnect.io` | `Password123!` | Accept pickups from the available job pool; move tasks through the state machine. |
-| **Authority** | `david.park@greenfield.gov` | `Password123!` | Triage civic issues, dispatch field teams, review SLAs. |
-| **Admin** | `admin@wasteconnect.io` | `Admin@123!` | System-wide Hotspot Score map, user management, and audit logs. |
+| Persona | Name | Email | Password | What to Demo |
+|---|---|---|---|---|
+| **Admin** | Rajiv Mehta | `admin@wasteconnect.in` | `Admin@123!` | System-wide Hotspot Score map, **User management (+ Add User)**, and audit logs. |
+| **Admin (Legacy)** | System Admin | `admin@wasteconnect.io` | `Admin@123!` | Default fallback admin account. |
+| **Authority** | Neha Gupta | `neha.gupta@greenfield.gov.in` | `Password123!` | Triage civic issues, dispatch field teams, review SLAs. |
+| **Collector** | Vikram Singh | `vikram.singh@wasteconnect.in` | `Password123!` | Accept pickups from the available job pool; move tasks through the state machine. |
+| **Collector** | Rajesh Kumar | `rajesh.kumar@wasteconnect.in` | `Password123!` | Review collection histories and weight records. |
+| **Citizen** | Aarav Sharma | `aarav.sharma@example.com` | `Password123!` | Request household pickup with clean weights (`9.6 kg`), report street litter with map pin and photo. |
+| **Citizen** | Priya Patel | `priya.patel@example.com` | `Password123!` | Track household collection status and view timeline. |
+| **Personal Email / Google** | Anyone | Any personal email (e.g. `you@gmail.com`) | Self-registered or Google 1-click | Instant Citizen account creation with personal email. |
 
 ---
 
 ## 5. Deployment Guide (Free)
 
 ### Step A: Push to GitHub
-Make sure your terminal is inside `wc-02`:
+Make sure your terminal is inside the project root:
 ```powershell
-cd c:\Users\avnis\OneDrive\Desktop\AGI\wc-02
-git init
 git add .
-git commit -m "WasteConnect initial commit"
-git branch -M main
-git remote add origin https://github.com/YOUR_GITHUB_USERNAME/wasteconnect.git
-git push -u origin main
+git commit -m "WasteConnect MERN Pure JS conversion, Vercel SPA fix, Indian personas, and clean weight display"
+git push origin main
 ```
 
 ### Step B: Backend on Render.com (Free)
 1. New **Web Service** on [render.com](https://render.com) connected to your GitHub repo.
 2. Settings:
    - Root Directory: `server`
-   - Build Command: `npm install && npm run build`
+   - Build Command: `npm install`
    - Start Command: `npm start`
    - Plan: `Free`
 3. Environment Variables:
@@ -123,4 +135,4 @@ git push -u origin main
    - Output Directory: `dist`
 3. Environment Variable:
    - `VITE_API_URL` = `https://wasteconnect-api-xxxx.onrender.com/api`
-4. Deploy!
+4. Deploy! The included `vercel.json` ensures that direct visits to `/login`, `/register`, or `/admin/dashboard` never return 404.

@@ -11,28 +11,27 @@ WasteConnect is a portfolio-grade full-stack platform that connects **Citizens**
 
 ---
 
-## Technology Stack
+## Technology Stack (MERN Architecture)
 
-| Layer | Stack |
-|---|---|
-| Frontend | React 18, TypeScript, Vite, Tailwind CSS, shadcn/ui, TanStack Query, Recharts, React Leaflet |
-| Backend | Node.js, Express.js, TypeScript, REST API |
-| Database | MongoDB, Mongoose |
-| Auth | JWT, bcryptjs, role-based access control |
-| AI | Pluggable AIProvider (Mock / OpenAI / Gemini) |
-| Maps | React Leaflet + OpenStreetMap |
+| Layer | Stack | Details |
+|---|---|---|
+| **M** — Database | MongoDB Atlas, Mongoose 8 | Multi-tenant collections for Users, Pickups, Issues, Areas, Logs |
+| **E** — Backend | Express.js 4, Node.js (ESM), REST API | JWT Auth, RBAC, Rate Limiting, Zod Validation |
+| **R** — Frontend | React 18 (JSX), Vite, Tailwind CSS | Single Page App, TanStack Query, Leaflet Maps, Recharts |
+| **N** — Runtime | Node.js (v18–v22) | High-performance asynchronous JavaScript engine |
 
 ---
 
 ## Project Structure
 
-```
-wc-02/
-├── client/          # React + Vite frontend
-├── server/          # Express + TypeScript backend
-├── docs/            # Architecture & API documentation
+```text
+wasteconnect/
+├── client/          # React 18 (JSX) + Vite frontend
+├── server/          # Node.js + Express.js backend (ES Modules)
+├── client/vercel.json # Vercel SPA routing rewrite rules (fixes 404s)
+├── MERN_ARCHITECTURE.md # Detailed MERN defense and architecture guide
+├── QUICK_START_AND_DEPLOY.md # Deployment & test credentials cheat sheet
 ├── .env.example     # Environment variable template
-├── .gitignore
 ├── docker-compose.yml
 └── README.md
 ```
@@ -104,24 +103,21 @@ cd client && npm run dev
 
 ---
 
-## Development Credentials
+## Development & Demo Credentials
 
-> These credentials are for development only. Do not use in production.
+Use any of the following accounts or click **"Continue with Google"** on the Sign In page to select an account instantly or enter any personal email address.
 
-| Role | Email | Password |
-|---|---|---|
-| Citizen | maya.chen@example.com | Password123! |
-| Citizen | rahul.sharma@example.com | Password123! |
-| Citizen | priya.nair@example.com | Password123! |
-| Collector | alex.martinez@wasteconnect.io | Password123! |
-| Collector | james.okonkwo@wasteconnect.io | Password123! |
-| Collector | fatima.hassan@wasteconnect.io | Password123! |
-| Authority | david.park@greenfield.gov | Password123! |
-| Authority | sarah.johnson@greenfield.gov | Password123! |
-| Authority | amir.khan@greenfield.gov | Password123! |
-| Admin | admin@wasteconnect.io | Admin@123! |
-| Admin | ops.admin@wasteconnect.io | Admin@123! |
-| Admin | data.admin@wasteconnect.io | Admin@123! |
+| Role | Person Name | Email | Password |
+|---|---|---|---|
+| **Admin** | Rajiv Mehta | `admin@wasteconnect.in` | `Admin@123!` |
+| **Admin (Legacy)** | System Admin | `admin@wasteconnect.io` | `Admin@123!` |
+| **Authority** | Neha Gupta | `neha.gupta@greenfield.gov.in` | `Password123!` |
+| **Authority** | Arjun Deshmukh | `arjun.deshmukh@greenfield.gov.in` | `Password123!` |
+| **Collector** | Vikram Singh | `vikram.singh@wasteconnect.in` | `Password123!` |
+| **Collector** | Rajesh Kumar | `rajesh.kumar@wasteconnect.in` | `Password123!` |
+| **Citizen** | Aarav Sharma | `aarav.sharma@example.com` | `Password123!` |
+| **Citizen** | Priya Patel | `priya.patel@example.com` | `Password123!` |
+| **Citizen** | Personal User | Any personal email (e.g. `you@gmail.com`) | Self-registered or Google 1-click |
 
 ---
 
