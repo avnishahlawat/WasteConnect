@@ -14,9 +14,34 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 // Security
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: false,
+}));
+
+const allowedOrigins = [
+    config.clientUrl,
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:5000',
+].filter(Boolean);
+
+if (process.env.CLIENT_URLS) {
+    allowedOrigins.push(...process.env.CLIENT_URLS.split(',').map((s) => s.trim()));
+}
+
 app.use(cors({
-    origin: config.clientUrl,
+    origin: (origin, callback) => {
+        if (!origin) return callback(null, true);
+        if (
+            allowedOrigins.includes(origin) ||
+            origin.endsWith('.vercel.app') ||
+            origin.endsWith('.onrender.com') ||
+            config.nodeEnv === 'development'
+        ) {
+            return callback(null, true);
+        }
+        return callback(null, true);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization'],
